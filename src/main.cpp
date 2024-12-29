@@ -9,28 +9,30 @@
 
 
 // Constants zone
-constexpr uint8_t MAX_RETURN_SIZE = 255;
+constexpr size_t MAX_RETURN_SIZE = 1024; // Using in exec() as text buffer size
 
 
-std::string exec(const char *cmd) {
-    std::array<char, MAX_RETURN_SIZE> buffer{};
+// Function to execute a command and get its output
+std::string exec(const std::string& cmd) {
+    std::array<char, MAX_RETURN_SIZE> buffer{};  // Buffer for reading data
     std::string result;
 
-    // Open process: popen
-    FILE *pipe = popen(cmd, "r");
-    if (pipe == nullptr) {
-        throw std::runtime_error("popen failed!");
+    // Open process using popen and ensure proper closure with unique_ptr
+    const std::unique_ptr<FILE, int(*)(FILE*)> pipe(popen(cmd.c_str(), "r"), pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen failed!");  // Throw an error if popen fails
     }
 
-    // Reading returned data
-    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
+    // Read data from the pipe and accumulate it into the result string
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
         result += buffer.data();
     }
-    fclose(pipe);
+
     return result;
 }
 
-int main() {
+
+void spdlog_test() {
     spdlog::info("Welcome to spdlog!");
     spdlog::error("Some error message with arg: {}", 1);
 
@@ -52,3 +54,13 @@ int main() {
     SPDLOG_TRACE("Some trace message with param {}", 42);
     SPDLOG_DEBUG("Some debug message");
 }
+
+int main() {
+    // spdlog_test();
+
+    std::cout << exec("tree") << std::endl;
+}
+
+
+
+// TODO: Розібратись з ctest
