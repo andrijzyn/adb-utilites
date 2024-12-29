@@ -1,0 +1,22 @@
+name: pre-commit
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master, dev ]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Run pre-commit hooks
+        uses: pre-commit/action@v2.0.0
+        with:
+          install_cmd: 'pip install pre-commit'

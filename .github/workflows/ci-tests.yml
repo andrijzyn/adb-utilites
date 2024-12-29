@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master, dev ]  # Trigger on pull requests to main, master, and dev branches
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner for consistency
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcovr lcov libspdlog-dev doxygen
+
+      - name: Set environment variables
+        run: |
+          echo "CMAKE_BUILD_TYPE=Debug" >> $GITHUB_ENV
+
+      - name: Configure and Build documentation
+        run: |
+          cmake -H. -Bbuild_docs -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}
+          cmake --build build_docs --config ${{ env.CMAKE_BUILD_TYPE }} --target docs -j4
+
+      - name: List files in build_docs
+        run: ls -al ./build_docs
+
+      - name: Configure (Tests)
+        run: |
+          if [ "${{ env.ENABLE_COVERAGE }}" == "On" ]; then
+            cmake -H. -Bbuild_tests -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} -DENABLE_COVERAGE=On
+          else
+            cmake -H. -Bbuild_tests -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }}
+          fi
+
+      - name: Build (Tests)
+        run: |
+          if [ "${{ env.ENABLE_COVERAGE }}" == "On" ]; then
+            cmake --build build_tests --config ${{ env.CMAKE_BUILD_TYPE }} --target coverage -j4
+          else
+            cmake --build build_tests --config ${{ env.CMAKE_BUILD_TYPE }} -j4
+          fi
+
+      - name: Run tests (Tests)
+        run: |
+          if [ "${{ env.ENABLE_COVERAGE }}" == "On" ]; then
+            cd build_tests/tests
+            ./unit_tests
+            bash <(curl -s https://codecov.io/bash)
+          fi
+        shell: bash
+
+      - name: Deploy documentation to GitHub Pages
+        uses: Cecilapp/GitHub-Pages-deploy@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          build_dir: ./build_docs
