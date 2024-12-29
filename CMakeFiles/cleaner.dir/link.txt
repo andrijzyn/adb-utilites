@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/cleaner.dir/link.d CMakeFiles/cleaner.dir/main.cpp.o -o cleaner

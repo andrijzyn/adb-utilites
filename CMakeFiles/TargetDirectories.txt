@@ -1,3 +1,0 @@
-/home/andrijzyn/cpp/Clearner/CMakeFiles/cleaner.dir
-/home/andrijzyn/cpp/Clearner/CMakeFiles/edit_cache.dir
-/home/andrijzyn/cpp/Clearner/CMakeFiles/rebuild_cache.dir

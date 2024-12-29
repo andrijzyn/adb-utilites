@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/andrijzyn/cpp/Clearner",
-  "command": "/usr/bin/c++    -o CMakeFiles/cleaner.dir/main.cpp.o -c /home/andrijzyn/cpp/Clearner/main.cpp",
-  "file": "/home/andrijzyn/cpp/Clearner/main.cpp",
-  "output": "CMakeFiles/cleaner.dir/main.cpp.o"
-}
-]
