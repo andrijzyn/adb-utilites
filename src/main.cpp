@@ -1,8 +1,36 @@
-// #include <iostream>
 #include "spdlog/spdlog.h"
+#include <array>
+#include <cstdint>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
-int main()
-{
+
+// Constants zone
+constexpr uint8_t MAX_RETURN_SIZE = 255;
+
+
+std::string exec(const char *cmd) {
+    std::array<char, MAX_RETURN_SIZE> buffer{};
+    std::string result;
+
+    // Open process: popen
+    FILE *pipe = popen(cmd, "r");
+    if (pipe == nullptr) {
+        throw std::runtime_error("popen failed!");
+    }
+
+    // Reading returned data
+    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
+        result += buffer.data();
+    }
+    fclose(pipe);
+    return result;
+}
+
+int main() {
     spdlog::info("Welcome to spdlog!");
     spdlog::error("Some error message with arg: {}", 1);
 

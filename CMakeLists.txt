@@ -14,36 +14,8 @@ add_custom_target(docs
 # Finding lib's: spdlog
 find_package(spdlog REQUIRED)
 
-# Options for coverage code
-option(ENABLE_COVERAGE "Enable code coverage reporting" OFF)
-
-if(ENABLE_COVERAGE)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        message(STATUS "Enabling coverage flags")
-        add_compile_options(--coverage)
-        add_link_options(--coverage)
-    else()
-        message(WARNING "Code coverage is not supported on this compiler")
-    endif()
-endif()
-
 # mail exec file
-add_executable(cleaner main.cpp)
+add_executable(cleaner src/main.cpp)
 
 # Linking with spdlog
 target_link_libraries(cleaner PRIVATE spdlog::spdlog)
-
-# Target for generating report for Covering
-if(ENABLE_COVERAGE)
-    find_program(GCOVR_EXECUTABLE gcovr)
-    if(GCOVR_EXECUTABLE)
-        add_custom_target(coverage
-            COMMAND ${GCOVR_EXECUTABLE} -r ${CMAKE_SOURCE_DIR} --html --html-details -o coverage.html
-            COMMAND ${GCOVR_EXECUTABLE} -r ${CMAKE_SOURCE_DIR} --xml -o coverage.xml
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Generating coverage report"
-        )
-    else()
-        message(WARNING "gcovr not found! Coverage report will not be generated.")
-    endif()
-endif()
