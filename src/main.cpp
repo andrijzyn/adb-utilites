@@ -1,6 +1,7 @@
 #include "spdlog/spdlog.h"
 #include <array>
 #include <cstdio>
+#include <iostream>
 #include <list>
 #include <memory>
 #include <stdexcept>
@@ -12,6 +13,48 @@ constexpr size_t MAX_RETURN_SIZE = 1024; // Using in exec() as text buffer size
 
 const std::string SUCCESS_REMOVED = "Success";
 const std::string SUCCESS_LACK = "Failure [not installed for 0]";
+
+const std::list<std::string> LIST_PACKAGES = {
+    "com.samsung.android.smartswitchassistant", // Samsung Smart Switch Assistant
+    "com.samsung.android.themestore",           // Samsung Theme Store
+    "com.samsung.android.game.gos",             // Game Optimization Service (GOS) | ID play on phone(
+    "com.samsung.android.game.gametools",       // Game Tools
+    "com.samsung.android.game.gamehome",        // Game Launcher
+    "com.samsung.android.kidsinstaller",        // Samsung Kids Installer
+    // "com.samsung.android.aircommandmanager",  // Air Command (S Pen menu) | S Pen doesnt support on A21S
+    "com.samsung.android.app.appsedge",          // Apps Edge
+    "com.samsung.android.app.updatecenter",      // Update Center | Support was ending
+    "com.samsung.android.shortcutbackupservice", // Shortcut Backup Service
+    "com.samsung.android.scloud",                // Samsung Cloud
+    "com.samsung.android.app.sharelive",         // Samsung Live Sharing
+    "com.samsung.android.dialer",                // Phone/Dialer     | From Google better
+    "com.samsung.android.messaging",             // Samsung Messages | >
+    "com.samsung.android.app.contacts",          // Samsung Contacts | >
+    "com.samsung.sree",                          // Promoting trash
+    "com.samsung.android.app.tips",
+    "com.samsung.android.app.parentalcare",
+    "com.google.android.tts",
+    "com.samsung.android.aremoji",
+    "com.sec.android.app.samsungapps",          // Galaxy Store
+    "com.sec.android.easyMover.Agent",          // Smart Switch Agent
+    "com.sec.android.app.chromecustomizations", // Chrome Customizations
+    "com.android.chrome",                       // Google Chrome
+    "tv.sweet.player",                          // Sweet TV Player
+    "com.megogo.application",                   // MEGOGO
+    "com.netflix.partner.activation",           // Netflix Activation
+    "com.microsoft.skydrive",                   // Microsoft OneDrive
+    "com.facebook.services",                    // Facebook Services
+    "com.facebook.katana",                      // Facebook App
+    "com.facebook.appmanager",                  // Facebook App Manager
+    "com.facebook.system",                      // Facebook System Services
+    "com.einnovation.temu",                     // Temu Shopping App
+    "com.google.android.apps.tachyon",          // Google Duo/Meet
+    "com.netflix.mediaclient",                  // Netflix App
+    "com.scopely.monopolygo",                   // Monopoly GO! Game
+    "com.samsung.android.bbc.bbcagent",         // Samsung BBC Agent
+    "com.samsung.android.privateshare",         // Samsung Private Share
+    "com.aura.oobe.samsung.gl"                  // AppCloud
+};
 
 // Function to execute a command and get its output
 std::string exec(const std::string &cmd) {
@@ -32,11 +75,9 @@ std::string exec(const std::string &cmd) {
     return result;
 }
 
-
-void removeRequest(const std::list<std::string> &REQUESTED_PACKAGES) {
-    for (const std::string &package : REQUESTED_PACKAGES) {
-        std::string command = "adb shell pm uninstall --user 0 " + package;
-        std::string response = exec(command);
+void removeRequest() {
+    for (const std::string &package : LIST_PACKAGES) {
+        std::string response = exec("adb shell pm uninstall --user 0 " + package);
 
         // If package successfully has been removed
         if (response.find(SUCCESS_REMOVED) != std::string::npos) {
@@ -55,50 +96,9 @@ void removeRequest(const std::list<std::string> &REQUESTED_PACKAGES) {
     }
 }
 
-int main() {
-    const std::list<std::string> LIST_PACKAGES = {
-        "com.samsung.android.smartswitchassistant",  // Samsung Smart Switch Assistant
-        "com.samsung.android.themestore",            // Samsung Theme Store
-        "com.samsung.android.game.gos",              // Game Optimization Service (GOS) | ID play on phone(
-        "com.samsung.android.game.gametools",        // Game Tools
-        "com.samsung.android.game.gamehome",         // Game Launcher
-        "com.samsung.android.kidsinstaller",         // Samsung Kids Installer
-        // "com.samsung.android.aircommandmanager",  // Air Command (S Pen menu) | S Pen doesnt support on A21S
-        "com.samsung.android.app.appsedge",          // Apps Edge
-        "com.samsung.android.app.updatecenter",      // Update Center | Support was ending
-        "com.samsung.android.shortcutbackupservice", // Shortcut Backup Service
-        "com.samsung.android.scloud",                // Samsung Cloud
-        "com.samsung.android.app.sharelive",         // Samsung Live Sharing
-        "com.samsung.android.dialer",                // Phone/Dialer     | From Google better
-        "com.samsung.android.messaging",             // Samsung Messages | >
-        "com.samsung.android.app.contacts",          // Samsung Contacts | >
-        "com.samsung.sree",                          // Promoting trash
-        "com.samsung.android.app.tips",
-        "com.samsung.android.app.parentalcare",
-        "com.google.android.tts",
-        "com.samsung.android.aremoji",
-        "com.sec.android.app.samsungapps",           // Galaxy Store
-        "com.sec.android.easyMover.Agent",           // Smart Switch Agent
-        "com.sec.android.app.chromecustomizations",  // Chrome Customizations
-        "com.android.chrome",                        // Google Chrome
-        "tv.sweet.player",                           // Sweet TV Player
-        "com.megogo.application",                    // MEGOGO
-        "com.netflix.partner.activation",            // Netflix Activation
-        "com.microsoft.skydrive",                    // Microsoft OneDrive
-        "com.facebook.services",                     // Facebook Services
-        "com.facebook.katana",                       // Facebook App
-        "com.facebook.appmanager",                   // Facebook App Manager
-        "com.facebook.system",                       // Facebook System Services
-        "com.einnovation.temu",                      // Temu Shopping App
-        "com.google.android.apps.tachyon",           // Google Duo/Meet
-        "com.netflix.mediaclient",                   // Netflix App
-        "com.scopely.monopolygo",                    // Monopoly GO! Game
-        "com.samsung.android.bbc.bbcagent",          // Samsung BBC Agent
-        "com.samsung.android.privateshare",          // Samsung Private Share
-        "com.aura.oobe.samsung.gl"                   // AppCloud
-    };
 
-    removeRequest(LIST_PACKAGES);
+int main() {
+    removeRequest();
 
     return 0;
 }
