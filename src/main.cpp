@@ -84,7 +84,8 @@ int main() {
         "com.netflix.mediaclient",                   // Netflix App
         "com.scopely.monopolygo",                    // Monopoly GO! Game
         "com.samsung.android.bbc.bbcagent",          // Samsung BBC Agent
-        "com.samsung.android.privateshare"           // Samsung Private Share
+        "com.samsung.android.privateshare",          // Samsung Private Share
+        "com.aura.oobe.samsung.gl"                   // AppCloud
     };
 
     removeRequest(LIST_PACKAGES);
