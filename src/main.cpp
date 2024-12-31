@@ -1,5 +1,6 @@
 #include "spdlog/spdlog.h"
 #include <array>
+#include <list>
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
@@ -11,6 +12,8 @@
 // Constants zone
 constexpr size_t MAX_RETURN_SIZE = 1024; // Using in exec() as text buffer size
 
+const std::string SUCCESS_REMOVED = "Success";
+const std::string SUCCESS_LACK = "Failure [not installed for 0]";
 
 // Function to execute a command and get its output
 std::string exec(const std::string& cmd) {
@@ -32,35 +35,65 @@ std::string exec(const std::string& cmd) {
 }
 
 
-void spdlog_test() {
-    spdlog::info("Welcome to spdlog!");
-    spdlog::error("Some error message with arg: {}", 1);
+void removeRequest(const std::list<std::string>& REQUESTED_PACKAGES) {
+    for (const std::string& package : REQUESTED_PACKAGES) {
+        std::string command = "adb shell pm uninstall --user 0 " + package;
+        std::string response = exec(command);
 
-    spdlog::warn("Easy padding in numbers like {:08d}", 12);
-    spdlog::critical("Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}", 42);
-    spdlog::info("Support for floats {:03.2f}", 1.23456);
-    spdlog::info("Positional args are {1} {0}..", "too", "supported");
-    spdlog::info("{:<30}", "left aligned");
-
-    spdlog::set_level(spdlog::level::debug); // Set global log level to debug
-    spdlog::debug("This message should be displayed..");
-
-    // change log pattern
-    spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
-
-    // Compile time log levels
-    // Note that this does not change the current log level, it will only
-    // remove (depending on SPDLOG_ACTIVE_LEVEL) the call on the release code.
-    SPDLOG_TRACE("Some trace message with param {}", 42);
-    SPDLOG_DEBUG("Some debug message");
+        if (response.find(SUCCESS_REMOVED) != std::string::npos) {
+            spdlog::info("Package {} has been removed successfully.", package);
+        } else if (response.find(SUCCESS_LACK) != std::string::npos) {
+            spdlog::warn("Package {} is not present.", package);
+        } else {
+            spdlog::critical("Unexpected response for package {}: {}", package, response);
+        }
+    }
 }
 
 int main() {
-    // spdlog_test();
+    const std::list<std::string> LIST_PACKAGES = {
+        "com.samsung.android.smartswitchassistant",
+        "com.samsung.android.themestore",
+        "com.samsung.android.themecenter",
+        "com.samsung.android.game.gos",
+        "com.samsung.android.game.gametools",
+        "com.samsung.android.game.gamehome",
+        "com.samsung.android.kidsinstaller",
+        "com.samsung.android.aircommandmanager",
+        "com.samsung.android.app.appsedge",
+        "com.samsung.android.app.updatecenter",
+        "com.samsung.android.shortcutbackupservice",
+        "com.samsung.android.scloud",
+        "com.samsung.android.app.sharelive",
+        "com.samsung.android.dialer",
+        "com.samsung.android.messaging",
+        "com.samsung.android.app.contacts",
+        "com.samsung.android.game.gamehome",
+        "com.sec.android.app.samsungapps",
+        "com.sec.android.easyMover.Agent",
+        "com.sec.android.app.chromecustomizations",
+        "com.android.chrome",
+        "tv.sweet.player",
+        "com.netflix.partner.activation",
+        "com.microsoft.skydrive",
+        "com.facebook.services",
+        "com.facebook.katana",
+        "com.facebook.appmanager",
+        "com.facebook.system",
+        "com.einnovation.temu",
+        "com.google.android.apps.tachyon",
+        "com.netflix.mediaclient",
+        "com.scopely.monopolygo",
+        "com.samsung.android.bbc.bbcagent",
+        "com.samsung.android.privateshare"
+    };
 
-    std::cout << exec("tree") << std::endl;
+    removeRequest(LIST_PACKAGES);
+
+    return 0;
 }
 
 
 
 // TODO: Розібратись з ctest
+// TODO: Зробити меню керування
