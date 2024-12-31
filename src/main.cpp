@@ -5,7 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
-
+#include <curses.h>
 
 // Constants zone
 constexpr size_t MAX_RETURN_SIZE = 1024;
@@ -91,13 +91,65 @@ void removeRequest() {
     }
 }
 
+// Function to display menu and select action
+int displayMenu(const std::vector<std::string>& options) {
+    int highlight = 0; // Highlighted option
 
-int main() {
-    removeRequest();
+    while (true) {
+        clear(); // Clear screen
+        for (size_t i = 0; i < options.size(); ++i) {
+            if (i == highlight)
+                attron(A_REVERSE); // Highlight current option
+            mvprintw(i + 1, 2, options[i].c_str());
+            if (i == highlight)
+                attroff(A_REVERSE);
+        }
 
-    return 0;
+        int key = getch(); // Get key input
+        switch (key) {
+            case KEY_UP:
+                highlight = (highlight > 0) ? highlight - 1 : options.size() - 1;
+                break;
+            case KEY_DOWN:
+                highlight = (highlight + 1) % options.size();
+                break;
+            case '\n': // Enter key
+                return highlight;
+        }
+    }
 }
 
+int main() {
+    initscr();            // Initialize ncurses
+    cbreak();             // Disable input buffering
+    noecho();             // Disable echoing typed characters
+    keypad(stdscr, true); // Enable arrow keys
+
+    std::vector<std::string> options = {
+        "Action 1: Say Hello",
+        "Action 2: Show Time",
+        "Exit"
+    };
+
+    while (true) {
+        int choice = displayMenu(options);
+
+        clear(); // Clear screen before executing action
+        if (choice == 0) {
+            mvprintw(1, 2, "Hello, World!");
+        } else if (choice == 1) {
+            mvprintw(1, 2, "Current time is: ");
+            system("date"); // Execute system command
+        } else if (choice == 2) {
+            break; // Exit program
+        }
+
+        mvprintw(3, 2, "Press any key to return to menu...");
+        getch(); // Wait for user input
+    }
+
+    endwin(); // End ncurses session
+    return 0;
 
     // Uncomment for testing package removal function
     // removeRequest();

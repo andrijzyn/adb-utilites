@@ -13,9 +13,11 @@ add_custom_command(
 )
 
 find_package(spdlog REQUIRED)
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
 
 # mail exec file
 add_executable(cleaner src/main.cpp)
 
 # Linking with spdlog
-target_link_libraries(cleaner PRIVATE spdlog::spdlog)
+target_link_libraries(cleaner PRIVATE spdlog::spdlog ${CURSES_LIBRARIES})
