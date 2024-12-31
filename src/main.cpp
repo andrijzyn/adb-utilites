@@ -1,59 +1,55 @@
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include <array>
 #include <cstdio>
-#include <iostream>
-#include <list>
+#include <vector>
 #include <memory>
 #include <stdexcept>
 #include <string>
 
 
 // Constants zone
-constexpr size_t MAX_RETURN_SIZE = 1024; // Using in exec() as text buffer size
-
+constexpr size_t MAX_RETURN_SIZE = 1024;
 const std::string SUCCESS_REMOVED = "Success";
 const std::string SUCCESS_LACK = "Failure [not installed for 0]";
-
-const std::list<std::string> LIST_PACKAGES = {
+const std::vector<std::string> VECTOR_PACKAGES = {
     "com.samsung.android.smartswitchassistant", // Samsung Smart Switch Assistant
     "com.samsung.android.themestore",           // Samsung Theme Store
-    "com.samsung.android.game.gos",             // Game Optimization Service (GOS) | ID play on phone(
+    "com.samsung.android.game.gos",             // Game Optimization Service (GOS)
     "com.samsung.android.game.gametools",       // Game Tools
     "com.samsung.android.game.gamehome",        // Game Launcher
     "com.samsung.android.kidsinstaller",        // Samsung Kids Installer
-    // "com.samsung.android.aircommandmanager",  // Air Command (S Pen menu) | S Pen doesnt support on A21S
-    "com.samsung.android.app.appsedge",          // Apps Edge
-    "com.samsung.android.app.updatecenter",      // Update Center | Support was ending
-    "com.samsung.android.shortcutbackupservice", // Shortcut Backup Service
-    "com.samsung.android.scloud",                // Samsung Cloud
-    "com.samsung.android.app.sharelive",         // Samsung Live Sharing
-    "com.samsung.android.dialer",                // Phone/Dialer     | From Google better
-    "com.samsung.android.messaging",             // Samsung Messages | >
-    "com.samsung.android.app.contacts",          // Samsung Contacts | >
-    "com.samsung.sree",                          // Promoting trash
-    "com.samsung.android.app.tips",
-    "com.samsung.android.app.parentalcare",
-    "com.google.android.tts",
-    "com.samsung.android.aremoji",
+    "com.samsung.android.app.appsedge",         // Apps Edge
+    "com.samsung.android.app.updatecenter",     // Update Center
+    "com.samsung.android.shortcutbackupservice",// Shortcut Backup Service
+    "com.samsung.android.scloud",               // Samsung Cloud
+    "com.samsung.android.app.sharelive",        // Samsung Live Sharing
+    "com.samsung.android.dialer",               // Phone/Dialer
+    "com.samsung.android.messaging",            // Samsung Messages
+    "com.samsung.android.app.contacts",         // Samsung Contacts
+    "com.samsung.sree",                         // Samsung Services
+    "com.samsung.android.app.tips",             // Samsung Tips
+    "com.samsung.android.app.parentalcare",     // Parental Control
+    "com.google.android.tts",                   // Google TTS
+    "com.samsung.android.aremoji",              // Samsung AR Emoji
     "com.sec.android.app.samsungapps",          // Galaxy Store
     "com.sec.android.easyMover.Agent",          // Smart Switch Agent
     "com.sec.android.app.chromecustomizations", // Chrome Customizations
-    "com.android.chrome",                       // Google Chrome
-    "tv.sweet.player",                          // Sweet TV Player
-    "com.megogo.application",                   // MEGOGO
-    "com.netflix.partner.activation",           // Netflix Activation
-    "com.microsoft.skydrive",                   // Microsoft OneDrive
-    "com.facebook.services",                    // Facebook Services
-    "com.facebook.katana",                      // Facebook App
-    "com.facebook.appmanager",                  // Facebook App Manager
-    "com.facebook.system",                      // Facebook System Services
-    "com.einnovation.temu",                     // Temu Shopping App
-    "com.google.android.apps.tachyon",          // Google Duo/Meet
-    "com.netflix.mediaclient",                  // Netflix App
-    "com.scopely.monopolygo",                   // Monopoly GO! Game
-    "com.samsung.android.bbc.bbcagent",         // Samsung BBC Agent
-    "com.samsung.android.privateshare",         // Samsung Private Share
-    "com.aura.oobe.samsung.gl"                  // AppCloud
+    "com.android.chrome",                      // Google Chrome
+    "tv.sweet.player",                         // Sweet TV Player
+    "com.megogo.application",                  // MEGOGO
+    "com.netflix.partner.activation",          // Netflix Activation
+    "com.microsoft.skydrive",                  // OneDrive
+    "com.facebook.services",                   // Facebook Services
+    "com.facebook.katana",                     // Facebook App
+    "com.facebook.appmanager",                 // Facebook App Manager
+    "com.facebook.system",                     // Facebook System Services
+    "com.einnovation.temu",                    // Temu Shopping App
+    "com.google.android.apps.tachyon",         // Google Duo/Meet
+    "com.netflix.mediaclient",                 // Netflix App
+    "com.scopely.monopolygo",                  // Monopoly GO! Game
+    "com.samsung.android.bbc.bbcagent",        // Samsung BBC Agent
+    "com.samsung.android.privateshare",        // Samsung Private Share
+    "com.aura.oobe.samsung.gl"                 // AppCloud
 };
 
 // Function to execute a command and get its output
@@ -75,21 +71,20 @@ std::string exec(const std::string &cmd) {
     return result;
 }
 
+// Function to remove packages
 void removeRequest() {
-    for (const std::string &package : LIST_PACKAGES) {
+    for (const std::string &package : VECTOR_PACKAGES) {
         std::string response = exec("adb shell pm uninstall --user 0 " + package);
 
         // If package successfully has been removed
         if (response.find(SUCCESS_REMOVED) != std::string::npos) {
             spdlog::info("Package {} has been removed successfully.", package);
         }
-
         // If package hasn't been removed
         else if (response.find(SUCCESS_LACK) != std::string::npos) {
             spdlog::warn("Package {} is not present.", package);
         }
-
-        // If all goes to ass
+        // Unexpected response
         else {
             spdlog::critical("Unexpected response for package {}: {}", package, response);
         }
@@ -104,5 +99,6 @@ int main() {
 }
 
 
-// TODO: Розібратись з ctest
-// TODO: Зробити меню керування
+    // Uncomment for testing package removal function
+    // removeRequest();
+}

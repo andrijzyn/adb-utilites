@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Docs needed
-add_custom_target(docs
-  COMMAND doxygen
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+add_custom_command(
+  OUTPUT ${CMAKE_SOURCE_DIR}/Doxyfile
+  COMMAND doxygen -g
+  COMMENT "Generating Doxyfile"
 )
 
-# Finding lib's: spdlog
 find_package(spdlog REQUIRED)
 
 # mail exec file
