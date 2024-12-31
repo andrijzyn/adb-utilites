@@ -51,40 +51,41 @@ void removeRequest(const std::list<std::string> &REQUESTED_PACKAGES) {
 }
 
 int main() {
-    const std::list<std::string> LIST_PACKAGES = {"com.samsung.android.smartswitchassistant",
-                                                  "com.samsung.android.themestore",
-                                                  "com.samsung.android.themecenter",
-                                                  "com.samsung.android.game.gos",
-                                                  "com.samsung.android.game.gametools",
-                                                  "com.samsung.android.game.gamehome",
-                                                  "com.samsung.android.kidsinstaller",
-                                                  "com.samsung.android.aircommandmanager",
-                                                  "com.samsung.android.app.appsedge",
-                                                  "com.samsung.android.app.updatecenter",
-                                                  "com.samsung.android.shortcutbackupservice",
-                                                  "com.samsung.android.scloud",
-                                                  "com.samsung.android.app.sharelive",
-                                                  "com.samsung.android.dialer",
-                                                  "com.samsung.android.messaging",
-                                                  "com.samsung.android.app.contacts",
-                                                  "com.samsung.android.game.gamehome",
-                                                  "com.sec.android.app.samsungapps",
-                                                  "com.sec.android.easyMover.Agent",
-                                                  "com.sec.android.app.chromecustomizations",
-                                                  "com.android.chrome",
-                                                  "tv.sweet.player",
-                                                  "com.netflix.partner.activation",
-                                                  "com.microsoft.skydrive",
-                                                  "com.facebook.services",
-                                                  "com.facebook.katana",
-                                                  "com.facebook.appmanager",
-                                                  "com.facebook.system",
-                                                  "com.einnovation.temu",
-                                                  "com.google.android.apps.tachyon",
-                                                  "com.netflix.mediaclient",
-                                                  "com.scopely.monopolygo",
-                                                  "com.samsung.android.bbc.bbcagent",
-                                                  "com.samsung.android.privateshare"};
+    const std::list<std::string> LIST_PACKAGES = {
+        "com.samsung.android.smartswitchassistant",  // Samsung Smart Switch Assistant
+        "com.samsung.android.themestore",            // Samsung Theme Store
+        "com.samsung.android.themecenter",           // Samsung Theme Center
+        "com.samsung.android.game.gos",              // Game Optimization Service (GOS) | ID play on phone(
+        "com.samsung.android.game.gametools",        // Game Tools
+        "com.samsung.android.game.gamehome",         // Game Launcher
+        "com.samsung.android.kidsinstaller",         // Samsung Kids Installer
+        "com.samsung.android.aircommandmanager",     // Air Command (S Pen menu) | S Pen doesnt support on A21S
+        "com.samsung.android.app.appsedge",          // Apps Edge
+        "com.samsung.android.app.updatecenter",      // Update Center | Support was ending
+        "com.samsung.android.shortcutbackupservice", // Shortcut Backup Service
+        "com.samsung.android.scloud",                // Samsung Cloud
+        "com.samsung.android.app.sharelive",         // Samsung Live Sharing
+        "com.samsung.android.dialer",                // Phone/Dialer     | From Google better
+        "com.samsung.android.messaging",             // Samsung Messages | >
+        "com.samsung.android.app.contacts",          // Samsung Contacts | >
+        "com.sec.android.app.samsungapps",           // Galaxy Store
+        "com.sec.android.easyMover.Agent",           // Smart Switch Agent
+        "com.sec.android.app.chromecustomizations",  // Chrome Customizations
+        "com.android.chrome",                        // Google Chrome
+        "tv.sweet.player",                           // Sweet TV Player
+        "com.netflix.partner.activation",            // Netflix Activation
+        "com.microsoft.skydrive",                    // Microsoft OneDrive
+        "com.facebook.services",                     // Facebook Services
+        "com.facebook.katana",                       // Facebook App
+        "com.facebook.appmanager",                   // Facebook App Manager
+        "com.facebook.system",                       // Facebook System Services
+        "com.einnovation.temu",                      // Temu Shopping App
+        "com.google.android.apps.tachyon",           // Google Duo/Meet
+        "com.netflix.mediaclient",                   // Netflix App
+        "com.scopely.monopolygo",                    // Monopoly GO! Game
+        "com.samsung.android.bbc.bbcagent",          // Samsung BBC Agent
+        "com.samsung.android.privateshare"           // Samsung Private Share
+    };
 
     removeRequest(LIST_PACKAGES);
 
