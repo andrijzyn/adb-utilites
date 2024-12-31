@@ -59,7 +59,7 @@ int main() {
         "com.samsung.android.game.gametools",        // Game Tools
         "com.samsung.android.game.gamehome",         // Game Launcher
         "com.samsung.android.kidsinstaller",         // Samsung Kids Installer
-        "com.samsung.android.aircommandmanager",     // Air Command (S Pen menu) | S Pen doesnt support on A21S
+        // "com.samsung.android.aircommandmanager",     // Air Command (S Pen menu) | S Pen doesnt support on A21S
         "com.samsung.android.app.appsedge",          // Apps Edge
         "com.samsung.android.app.updatecenter",      // Update Center | Support was ending
         "com.samsung.android.shortcutbackupservice", // Shortcut Backup Service
@@ -68,11 +68,13 @@ int main() {
         "com.samsung.android.dialer",                // Phone/Dialer     | From Google better
         "com.samsung.android.messaging",             // Samsung Messages | >
         "com.samsung.android.app.contacts",          // Samsung Contacts | >
+        "com.samsung.sree",                          // Promoting trash
         "com.sec.android.app.samsungapps",           // Galaxy Store
         "com.sec.android.easyMover.Agent",           // Smart Switch Agent
         "com.sec.android.app.chromecustomizations",  // Chrome Customizations
         "com.android.chrome",                        // Google Chrome
         "tv.sweet.player",                           // Sweet TV Player
+        "com.megogo.application",                    // MEGOGO
         "com.netflix.partner.activation",            // Netflix Activation
         "com.microsoft.skydrive",                    // Microsoft OneDrive
         "com.facebook.services",                     // Facebook Services
