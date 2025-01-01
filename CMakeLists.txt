@@ -5,13 +5,17 @@ project(smsng_cleaner VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Docs needed
 add_custom_command(
   OUTPUT ${CMAKE_SOURCE_DIR}/Doxyfile
-  COMMAND doxygen -g
+  COMMAND doxygen -g ${CMAKE_SOURCE_DIR}/Doxyfile
   COMMENT "Generating Doxyfile"
 )
 
+add_custom_target(
+  docs ALL
+  DEPENDS ${CMAKE_SOURCE_DIR}/Doxyfile
+  COMMENT "Building documentation"
+)
 find_package(spdlog REQUIRED)
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
