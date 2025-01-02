@@ -54,17 +54,13 @@ const std::vector<std::string> PACKAGES = {
     "com.aura.oobe.samsung.gl"                   // AppCloud
 };
 
-// Function to execute a command and get its output
-std::string exec(const std::string &cmd) {
-    std::array<char, MAX_RETURN_SIZE> buffer{}; // Buffer for reading data
+// Execute a command and get its output
+inline std::optional<std::string> exec(const std::string &cmd) {
+    std::array<char, 1024> buffer{};
     std::string result;
 
-    // Open process using popen and ensure proper closure with unique_ptr
     const std::unique_ptr<FILE, int (*)(FILE *)> pipe(popen(cmd.c_str(), "r"), pclose);
-    if (!pipe) {
-        spdlog::error("Command execution failed: {}", cmd);    // Log error if popen fails
-        throw std::runtime_error("Command execution failed!"); // Throw an error if popen fails
-    }
+    if (!pipe) { return std::nullopt; }
 
     // Read data from the pipe and accumulate it into the result string
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
