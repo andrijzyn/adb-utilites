@@ -18,7 +18,6 @@ enum class MenuOption : std::uint8_t { GREET = 0, CLEAN, EXIT };
 const std::vector<std::string> PACKAGES = {
     "com.samsung.android.smartswitchassistant",  // Samsung Smart Switch Assistant
     "com.samsung.android.themestore",            // Samsung Theme Store
-    "com.samsung.android.game.gos",              // Game Optimization Service (GOS)
     "com.samsung.android.game.gametools",        // Game Tools
     "com.samsung.android.game.gamehome",         // Game Launcher
     "com.samsung.android.kidsinstaller",         // Samsung Kids Installer
@@ -33,7 +32,6 @@ const std::vector<std::string> PACKAGES = {
     "com.samsung.sree",                          // Samsung Services
     "com.samsung.android.app.tips",              // Samsung Tips
     "com.samsung.android.app.parentalcare",      // Parental Control
-    "com.google.android.tts",                    // Google TTS
     "com.samsung.android.aremoji",               // Samsung AR Emoji
     "com.sec.android.app.samsungapps",           // Galaxy Store
     "com.sec.android.easyMover.Agent",           // Smart Switch Agent
@@ -162,6 +160,7 @@ void waitForUserInput() {
     mvprintw(3, 2, "Press any key to return to menu...");
     getch(); // Wait for user input to return to menu
 }
+
 
 int main() {
     // Initialize spdlog (console logging with default level)
