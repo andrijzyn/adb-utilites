@@ -1,7 +1,10 @@
 #include <array>
 #include <cstdio>
 #include <curses.h>
+#include <iostream>
+#include <optional>
 #include <spdlog/spdlog.h>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -70,16 +73,28 @@ inline std::optional<std::string> exec(const std::string &cmd) {
     return result;
 }
 
-// Function to check if adb devices are available
-bool checkDevicesAvailable() {
-    std::string response = exec("adb shell");
+// Check if adb devices are available
+inline bool checkDevicesAvailable() {
+    std::optional<std::string> responseOpt = exec("adb devices");
 
-    // Check if the response contains any device entry
-    if (response.find("adb: no devices/emulators found") == std::string::npos) {
+    // Verify the command execution result
+    if (!responseOpt) { return false; }
+
+    const std::string &response = *responseOpt;
+    std::istringstream responseStream(response);
+    std::string line;
+    int lineCount = 0;
+
+    // Count lines in response
+    while (std::getline(responseStream, line)) { if (!line.empty()) { ++lineCount; } }
+
+    // If less than two lines, the device is not connected
+    if (lineCount < 2) { // The first line is the heading
         spdlog::critical("No devices or emulators found. Please connect a device.");
         return false; // No devices found
     }
 
+    spdlog::info("Devices detected:\n{}", response);
     return true; // Devices are available
 }
 
