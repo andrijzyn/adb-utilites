@@ -1,7 +1,6 @@
 #include <array>
 #include <cstdio>
 #include <curses.h>
-#include <iostream>
 #include <memory>
 #include <optional>
 #include <spdlog/spdlog.h>

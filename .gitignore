@@ -33,3 +33,4 @@ CMakePresets.json
 .vscode/c_cpp_properties.json
 *.code-workspace
 .history
+/.idea
